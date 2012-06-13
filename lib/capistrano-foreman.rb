@@ -1,4 +1,4 @@
-require "capistrano-foreman/version"
+require "capistrano/version"
 
 module Capistrano
   module Foreman
