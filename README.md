@@ -10,8 +10,8 @@ Capistrano tasks for foreman and upstart.
 
 Export Procfile to upstart:
 
-  $ cap foreman:export
+    $ cap foreman:export
 
 Restart the application services:
 
-  $ cap foreman:restart
+    $ cap foreman:restart
