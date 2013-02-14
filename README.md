@@ -15,3 +15,8 @@ Export Procfile to upstart:
 Restart the application services:
 
     $ cap foreman:restart
+
+## Credits
+
+Hyper made this. We're a digital communications agency with a passion for good code,
+and if you're using this library we probably want to hire you.
