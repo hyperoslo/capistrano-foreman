@@ -24,6 +24,8 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
 
 
   def concurrency
+    raise "concurrency in Config loaded"
+
     file = File.open('Procfile')
     processes = ""
 
