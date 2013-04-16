@@ -8,6 +8,10 @@ Capistrano tasks for foreman and upstart.
 
     $ gem install capistrano-foreman
 
+Add CONCURRENCY=n to your Procfile if you need more than one.
+
+    web: bundle exec rails server thin -p $PORT -e $RACK_ENV CONCURRENCY=3
+
 ## Usage
 
 Export Procfile to upstart:
