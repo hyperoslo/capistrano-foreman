@@ -27,7 +27,7 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
     processes = ""
   
     IO.foreach("Procfile") do |line|
-      line.match /\A([\w]+):.+CONCURRENCY=([\d]+)/       # $1 == processname, $2 == concurrency
+      line.match /\A([\w]+):.+CONCURRENCY=([\d]+).*/       # $1 == processname, $2 == concurrency
       processes += "#{$1}=#{$2},"    if $1 and $2
     end
   
