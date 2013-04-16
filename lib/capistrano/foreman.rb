@@ -3,7 +3,7 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
   namespace :foreman do
     desc "Export the Procfile to Ubuntu's upstart scripts"
     task :export, roles: :app do
-      run "cd #{current_path} && sudo bundle exec foreman export upstart /etc/init -a sites/#{application} -u #{user} -l #{shared_path}/log CONC #{concurrency}"
+      run "cd #{current_path} && sudo bundle exec foreman export upstart /etc/init -a sites/#{application} -u #{user} -l #{shared_path}/log #{concurrency}"
     end
 
     desc "Start the application services"
@@ -24,19 +24,15 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
 
 
   def concurrency
-    raise "concurrency in Config loaded"
-
-    file = File.open('Procfile')
     processes = ""
-
-    file.each do |line|
+  
+    IO.foreach("Procfile") do |line|
       line.match /\A([\w]+):.+CONCURRENCY=([\d]+)/       # $1 == processname, $2 == concurrency
       processes += "#{$1}=#{$2},"    if $1 and $2
     end
-    file.close
-
+  
     processes.empty? ? nil : "-c #{processes.chomp!(',')}"
   end
-
-
+  
+  
 end
