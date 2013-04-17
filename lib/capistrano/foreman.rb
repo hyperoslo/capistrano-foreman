@@ -22,17 +22,11 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
     end
   end
 
-
   def concurrency
-    processes = ""
-  
-    IO.foreach("Procfile") do |line|
-      line.match /\A([\w]+):.+CONCURRENCY=([\d]+).*/       # $1 == processname, $2 == concurrency
-      processes += "#{$1}=#{$2},"    if $1 and $2
-    end
-  
-    processes.empty? ? nil : "-c #{processes.chomp!(',')}"
+    foreman_settings = ENV.select { |key, value| key.to_s.match(/FOREMAN/) } 
+    processes = foreman_settings.map { |process,n| "#{process.downcase}=#{n}" }.join(',')
+    processes.gsub!('foreman_','')
+    processes.empty? ? nil : "-c #{processes}"
   end
-  
   
 end
