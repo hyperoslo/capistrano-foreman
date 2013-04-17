@@ -23,7 +23,7 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
   end
 
   def concurrency
-    foreman_settings = ENV.select { |key, value| key.to_s.match(/FOREMAN/) } 
+    foreman_settings = ENV.select { |key, value| key.to_s.match(/FOREMAN_.+/) } 
     processes = foreman_settings.map { |process,n| "#{process.downcase}=#{n}" }.join(',')
     processes.gsub!('foreman_','')
     processes.empty? ? nil : "-c #{processes}"
