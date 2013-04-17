@@ -21,6 +21,7 @@ web: bundle exec rails server thin -p $PORT  -e $RACK_ENV
 ```
 
 Remember to run ```cap foreman:export``` after changing the ENV variables.
+You must also remove ```bash [ -z "$PS1" ] && return ``` from ~/.bashrc on the server.
 
 ## Usage
 
