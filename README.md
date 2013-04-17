@@ -12,11 +12,14 @@ Add this to your config/deploy.rb:
 
     require "foreman/capistrano"
 
-Specify the concurrency for each process by defining ENV variables
-```FOREMAN_WEB=3``` creates 3 instances of the process defined as 'web' in your Procfile
-    web: bundle exec rails server thin -p $PORT  -e $RACK_ENV
+Specify the concurrency for each process by defining ENV variables.
 
-Remember to run ```cap foreman:export``` after changing the variables.
+```FOREMAN_WEB=3``` creates 3 instances of the process defined as 'web' in your Procfile.
+```
+web: bundle exec rails server thin -p $PORT  -e $RACK_ENV
+```
+
+Remember to run ```cap foreman:export``` after changing the ENV variables.
 
 ## Usage
 
