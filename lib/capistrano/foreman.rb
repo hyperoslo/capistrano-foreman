@@ -3,7 +3,7 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
   namespace :foreman do
     desc "Export the Procfile to Ubuntu's upstart scripts"
     task :export, roles: :app do
-      run "cd #{current_path} && sudo bundle exec foreman export upstart /etc/init -a sites/#{application} -u #{user} -l #{shared_path}/log"
+      run "cd #{current_path} && sudo bundle exec foreman export upstart /etc/init -a sites/#{application} -u #{user} -l #{shared_path}/log #{concurrency}"
     end
 
     desc "Start the application services"
@@ -22,4 +22,11 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
     end
   end
 
+  def concurrency
+    foreman_settings = ENV.select { |key, value| key.to_s.match(/FOREMAN_.+/) } 
+    processes = foreman_settings.map { |process,n| "#{process.downcase}=#{n}" }.join(',')
+    processes.gsub!('foreman_','')
+    processes.empty? ? nil : "-c #{processes}"
+  end
+  
 end
