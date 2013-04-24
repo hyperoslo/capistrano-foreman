@@ -10,10 +10,14 @@ Capistrano tasks for foreman and upstart.
 
 Add this to your config/deploy.rb:
 
-    require "foreman/capistrano"
-    # Optional configuration for RVM
-    set :foreman_sudo, 'rvmsudo'
+```ruby
+require 'foreman/capistrano'
 
+# Defaults settings
+set :foreman_sudo, 'sudo' # Set to `rvmsudo` if using RVM
+set :foreman_upstart_path, '/etc/init/sites' # Set /etc/init/ if you do not have a sites folder
+set :foreman_upstart_prefix, '' # Set to ex. `foreman-` or `staging-` if you want to prefix jobs names
+```
 
 
 Specify the concurrency for each process by defining ENV variables in a ```.env``` file in your application root dir.
