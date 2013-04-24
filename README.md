@@ -11,6 +11,8 @@ Capistrano tasks for foreman and upstart.
 Add this to your config/deploy.rb:
 
     require "foreman/capistrano"
+    # Optional configuration for RVM
+    set :foreman_sudo, 'rvmsudo'
 
 
 
