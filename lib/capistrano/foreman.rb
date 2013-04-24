@@ -7,6 +7,7 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
   namespace :foreman do
     desc "Export the Procfile to Ubuntu's upstart scripts"
     task :export, roles: :app do
+      run "if [[ -d #{foreman_upstart_path} ]]; then #{foreman_sudo} mkdir -p #{foreman_upstart_path}; fi"
       run "cd #{current_path} && #{foreman_sudo} bundle exec foreman export upstart #{foreman_upstart_path} -a #{service_name} -u #{user} -l #{shared_path}/log #{concurrency}"
     end
 
