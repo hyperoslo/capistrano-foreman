@@ -11,11 +11,13 @@ Capistrano tasks for foreman and upstart.
 Add this to your config/deploy.rb:
 
     require "foreman/capistrano"
-    # Optionnal configurations for foreman :
+    # Optional configurations for foreman CLI
     set :foreman_options, { 
       :env => '.env,.env.database',
       :concurrency => '3
     }
+    # Optional configuration for RVM
+    set :foreman_sudo, 'rvmsudo'
 
 Remember to run ```cap foreman:export``` after changing the ENV variables.
 
