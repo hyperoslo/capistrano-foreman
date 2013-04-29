@@ -18,12 +18,15 @@ set :foreman_sudo, 'sudo' # Set to `rvmsudo` if using RVM
 set :foreman_upstart_path, '/etc/init/sites' # Set /etc/init/ if you do not have a sites folder
 set :foreman_upstart_prefix, '' # Set to ex. `foreman-` or `staging-` if you want to prefix jobs names
 
-# Optionnal configurations for foreman :
+# Default foreman options
 set :foreman_options, {
-  :env => '.env,.env.database',
-  :concurrency => '3
+  :app => '#{foreman_upstart_prefix}#{application}',
+  :log => "#{shared_path}/log",
+  :user => user,
 }
 ```
+
+See [exporting options](http://ddollar.github.io/foreman/#EXPORTING0)
 
 Remember to run ```cap foreman:export``` after changing the ENV variables.
 
