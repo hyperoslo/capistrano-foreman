@@ -13,11 +13,9 @@ Add this to your config/deploy.rb:
 ```ruby
 require 'foreman/capistrano'
 
-# Defaults settings
-set :foreman_sudo, 'sudo' # Set to `rvmsudo` if using RVM
-set :foreman_upstart_path, '/etc/init/sites' # Set /etc/init/ if you do not have a sites folder
-
-# Default foreman options
+# Default settings
+set :foreman_sudo, 'sudo'                    # Set to `rvmsudo` if you're using RVM
+set :foreman_upstart_path, '/etc/init/sites' # Set to `/etc/init/` if you do not have a sites folder
 set :foreman_options, {
   app: application,
   log: "#{shared_path}/log",
