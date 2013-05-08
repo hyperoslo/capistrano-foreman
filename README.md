@@ -19,9 +19,9 @@ set :foreman_upstart_path, '/etc/init/sites' # Set /etc/init/ if you do not have
 
 # Default foreman options
 set :foreman_options, {
-  :app => application,
-  :log => "#{shared_path}/log",
-  :user => user,
+  app: application,
+  log: "#{shared_path}/log",
+  user: user,
 }
 ```
 
