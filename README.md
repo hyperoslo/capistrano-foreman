@@ -16,18 +16,18 @@ require 'foreman/capistrano'
 # Defaults settings
 set :foreman_sudo, 'sudo' # Set to `rvmsudo` if using RVM
 set :foreman_upstart_path, '/etc/init/sites' # Set /etc/init/ if you do not have a sites folder
-set :foreman_upstart_prefix, '' # Set to ex. `foreman-` or `staging-` if you want to prefix jobs names
+
+# Default foreman options
+set :foreman_options, {
+  :app => application,
+  :log => "#{shared_path}/log",
+  :user => user,
+}
 ```
 
-
-Specify the concurrency for each process by defining ENV variables in a ```.env``` file in your application root dir.
-```FOREMAN_WEB=3``` will create 3 instances of the process defined as 'web' in your Procfile.
-```
-web: bundle exec rails server thin -p $PORT  -e $RACK_ENV
-```
+See [exporting options](http://ddollar.github.io/foreman/#EXPORTING0)
 
 Remember to run ```cap foreman:export``` after changing the ENV variables.
-
 
 ## Usage
 
