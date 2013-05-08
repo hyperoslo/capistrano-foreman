@@ -15,7 +15,7 @@ require 'foreman/capistrano'
 
 # Default settings
 set :foreman_sudo, 'sudo'                    # Set to `rvmsudo` if you're using RVM
-set :foreman_upstart_path, '/etc/init/sites' # Set to `/etc/init/` if you do not have a sites folder
+set :foreman_upstart_path, '/etc/init/sites' # Set to `/etc/init/` if you don't have a sites folder
 set :foreman_options, {
   app: application,
   log: "#{shared_path}/log",
@@ -23,7 +23,7 @@ set :foreman_options, {
 }
 ```
 
-See [exporting options](http://ddollar.github.io/foreman/#EXPORTING0)
+See [exporting options](http://ddollar.github.io/foreman/#EXPORTING0) for an exhaustive list of foreman options.
 
 ## Usage
 
