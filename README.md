@@ -8,7 +8,7 @@ Capistrano tasks for foreman and upstart.
 
     $ gem install capistrano-foreman
 
-Add this to your config/deploy.rb:
+Add this to your `Capfile`:
 
 ```ruby
 require 'foreman/capistrano'
