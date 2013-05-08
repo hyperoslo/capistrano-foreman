@@ -8,26 +8,26 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
     desc "Export the Procfile to Ubuntu's upstart scripts"
     task :export, roles: :app do
       run "if [[ -d #{foreman_upstart_path} ]]; then #{foreman_sudo} mkdir -p #{foreman_upstart_path}; fi"
-      run "cd #{current_path} && #{foreman_sudo} bundle exec foreman export upstart #{foreman_upstart_path} #{options(foreman_options)}"
+      run "cd #{current_path} && #{foreman_sudo} bundle exec foreman export upstart #{foreman_upstart_path} #{format options}"
     end
 
     desc "Start the application services"
     task :start, roles: :app do
-      sudo "service #{foreman_options[:app]} start"
+      sudo "service #{options[:app]} start"
     end
 
     desc "Stop the application services"
     task :stop, roles: :app do
-      sudo "service #{foreman_options[:app]} stop"
+      sudo "service #{options[:app]} stop"
     end
 
     desc "Restart the application services"
     task :restart, roles: :app do
-      run "sudo service #{foreman_options[:app]} start || sudo service #{foreman_options[:app]}  restart"
+      run "sudo service #{options[:app]} start || sudo service #{options[:app]}  restart"
     end
   end
 
-  def foreman_options
+  def options
     {
       app: application,
       log: "#{shared_path}/log",
@@ -35,7 +35,7 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
     }.merge foreman_options
   end
 
-  def options options
+  def format options
     options.map { |opt, value| "--#{opt}=#{value}" }.join " "
   end
   
