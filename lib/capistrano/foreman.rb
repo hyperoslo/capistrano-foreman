@@ -28,12 +28,11 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
   end
 
   def foreman_options
-    options = {
+    {
       app: application,
       log: "#{shared_path}/log",
       user: user
-    }
-    options.merge foreman_options
+    }.merge foreman_options
   end
 
   def options options
