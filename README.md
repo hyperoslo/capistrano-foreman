@@ -27,8 +27,6 @@ set :foreman_options, {
 
 See [exporting options](http://ddollar.github.io/foreman/#EXPORTING0)
 
-Remember to run ```cap foreman:export``` after changing the ENV variables.
-
 ## Usage
 
 Export Procfile to upstart:
