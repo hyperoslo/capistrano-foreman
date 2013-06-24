@@ -1,3 +1,4 @@
+require 'capistrano/role'
 require "capistrano/version"
 
 module Capistrano
