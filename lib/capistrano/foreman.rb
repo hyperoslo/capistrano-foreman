@@ -25,7 +25,13 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
 
     desc "Restart the application services"
     task :restart, roles: :app do
-      sudo "restart #{service_name}"
+      begin
+        logger.info "Try to restart service #{service_name}"
+        sudo "restart #{service_name}"
+      rescue
+        logger.info "Try to start service #{service_name} since it's not started yet"
+        sudo "start #{service_name}"
+      end
     end
 
     def options
