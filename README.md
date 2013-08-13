@@ -14,10 +14,10 @@ Add this to your `Capfile`:
 require 'capistrano/foreman'
 
 # Default settings
-set :foreman_sudo, 'sudo'                    # Set to `rvmsudo` if you're using RVM
-set :foreman_upstart_path, '/etc/init/sites' # Set to `/etc/init/` if you don't have a sites folder
+set :foreman_sudo, ''   # Set to sudo if you need sudo privileges to export services, set to `rvmsudo` if you're using RVM
+set :foreman_upstart_path, '/etc/init/'
 set :foreman_options, {
-  app: application,
+  app: "sites/#{application}",
   log: "#{shared_path}/log",
   user: user,
 }
@@ -34,6 +34,41 @@ Export Procfile to upstart:
 Restart the application services:
 
     $ cap foreman:restart
+
+## Rails usage
+
+Server setup (assuming your capistrano user is `rails` with group `rails`)
+
+```
+# in /etc/sudoers
+Cmnd_Alias UPSTART_SITES = /sbin/start sites/*,/sbin/stop sites/*,/sbin/restart sites/*,/sbin/status sites/*,/sbin/reload sites/*
+rails  ALL=(root) NOPASSWD:UPSTART_SITES
+```
+
+Create the sites folder
+
+```
+# In this way rails user is allowed to export foreman configs without sudo
+mkdir -p /etc/init/sites && chgrp rails /etc/init/sites && chmod 2775 /etc/init/sites
+```
+
+Capistrano config:
+
+```ruby
+# in config/deploy.rb 
+require 'capistrano/foreman'
+after 'deploy:restart', 'foreman:export'
+after 'deploy:restart', 'foreman:restart'
+
+```
+
+Manage sites/app from shell as root or allowed sudoer:
+
+```
+(sudo) start sites/app
+(sudo) stop sites/app
+(sudo) restart sites/app
+```
 
 ## Credits
 

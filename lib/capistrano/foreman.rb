@@ -1,7 +1,7 @@
 Capistrano::Configuration.instance(:must_exist).load do |configuration|
 
-  _cset :foreman_sudo, "sudo"
-  _cset :foreman_upstart_path, "/etc/init/sites"
+  _cset :foreman_sudo, ""
+  _cset :foreman_upstart_path, "/etc/init/"
   _cset :foreman_options, {}
   _cset :foreman_use_binstubs, false
 
@@ -36,22 +36,14 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
 
     def options
       {
-        app: application,
+        app: "sites/#{application}",
         log: "#{shared_path}/log",
         user: user
       }.merge foreman_options
     end
     
     def service_name
-      # /etc/init/app.conf => start/stop/reload app
-      # /etc/init/sites/app.conf => start/stop/reload sites/app
-      # /other/path/ => ???
-      if foreman_upstart_path.start_with? "/etc/init" 
-        foreman_upstart_path =~ %r{^/etc/init/?$} ? application : "#{foreman_upstart_path.gsub(%{/etc/init/}, '')}/#{application}"
-      else
-        # ??? when upstart jobs are exported outside /etc/init what is the behavior?
-        application
-      end
+      options[:app]
     end
 
     def format opts
