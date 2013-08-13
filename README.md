@@ -70,6 +70,19 @@ Manage sites/app from shell as root or allowed sudoer:
 (sudo) restart sites/app
 ```
 
+## Environment management
+
+Foreman gem [handles environment variables](http://ddollar.github.io/foreman/#ENVIRONMENT) using .env files. It will load by default a file 
+ named`.env` if such file exist. If you want more fine grained control on the environment of exported configuration you can use these two variables:
+
+* `foreman_env_files`: (default `[]`) an explicit list of env files to load during export. It can be useful to load different env files in 
+  different capistrano env. With multistage extension one can do `set foreman_env_files, ['common', rails_env]`. The argument is 
+  an array of filenames *without* `.env` extension (it will be added automatically). If this list is not empty default `.env` file *won't*
+  be loaded by foreman.
+* `foreman_generate_rails_env`: (default `false`) if `true` a file with common Rails env variables (currently `RAILS_ENV` and `RACK_ENV`)
+ is automatically generated and prepended to the above list. Notice that setting this option to `true` will disable loading of default `.env`
+ file.
+
 ## Credits
 
 Hyper made this. We're a digital communications agency with a passion for good code,
