@@ -10,7 +10,7 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
     task :export, roles: :app do
       cmd = foreman_use_binstubs ? 'bin/foreman' : 'bundle exec foreman'
       run "if [[ -d #{foreman_upstart_path} ]]; then #{foreman_sudo} mkdir -p #{foreman_upstart_path}; fi"
-      run "cd #{current_path} && #{foreman_sudo} #{cmd} export upstart #{foreman_upstart_path} #{format(options)}"
+      run "cd #{release_path} && #{foreman_sudo} #{cmd} export upstart #{foreman_upstart_path} #{format(options)}"
     end
 
     desc "Start the application services"
