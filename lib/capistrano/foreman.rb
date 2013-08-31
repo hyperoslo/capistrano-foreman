@@ -37,7 +37,7 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
     end
 
     def format opts
-      opts.map { |opt, value| "--#{opt}=#{value}" }.join " "
+      opts.map { |opt, value| "--#{opt}='#{value}'" }.join " "
     end
   end
   
