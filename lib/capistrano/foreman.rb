@@ -4,8 +4,8 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
   _cset :foreman_upstart_path, "/etc/init/"
   _cset :foreman_options, {}
   _cset :foreman_use_binstubs, false
-  _cset :forman_base_port, 5000
-  _cset :forman_procfile, 'Procfile'
+  _cset :foreman_base_port, 5000
+  _cset :foreman_procfile, 'Procfile'
   _cset :foreman_env_files, []
   _cset :foreman_generate_rails_env, false
 
@@ -15,7 +15,7 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
       generate_rails_env if generate_rails_env?
       cmd = foreman_use_binstubs ? 'bin/foreman' : 'bundle exec foreman'
       run "if [[ -d #{foreman_upstart_path} ]]; then #{foreman_sudo} mkdir -p #{foreman_upstart_path}; fi"
-      run "cd #{current_path} && #{foreman_sudo} #{cmd} export -f #{forman_procfile} -p #{foreman_base_port} upstart #{foreman_upstart_path} #{format(options)}"
+      run "cd #{current_path} && #{foreman_sudo} #{cmd} export -f #{foreman_procfile} -p #{foreman_base_port} upstart #{foreman_upstart_path} #{format(options)}"
     end
     
     desc "Start the application services"
