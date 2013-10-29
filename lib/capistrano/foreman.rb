@@ -28,6 +28,11 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
       sudo "stop #{service_name}"
     end
 
+    desc "Reload the application services"
+    task :stop, roles: :app do
+      sudo "reload #{service_name}"
+    end
+
     desc "Restart the application services"
     task :restart, roles: :app do
       begin
