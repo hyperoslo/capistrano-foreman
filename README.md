@@ -14,8 +14,8 @@ Add this to your `Capfile`:
 require 'capistrano/foreman'
 
 # Default settings
-set :foreman_sudo, 'sudo'                    # Set to `rvmsudo` if you're using RVM
-set :foreman_upstart_path, '/etc/init/sites' # Set to `/etc/init/` if you don't have a sites folder
+set :foreman_sudo, true
+set :foreman_export_path, '/etc/init/sites' # Set to `/etc/init/` if you don't have a sites folder
 set :foreman_options, {
   app: application,
   log: "#{shared_path}/log",
@@ -29,11 +29,11 @@ See [exporting options](http://ddollar.github.io/foreman/#EXPORTING0) for an exh
 
 Export Procfile to upstart:
 
-    $ cap foreman:export
+    $ bundle exec cap production foreman:export
 
 Restart the application services:
 
-    $ cap foreman:restart
+    $ bundle exec cap production foreman:restart
 
 ## Credits
 

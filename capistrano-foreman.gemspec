@@ -2,8 +2,8 @@
 require File.expand_path('../lib/capistrano/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Johannes Gorset"]
-  gem.email         = ["jgorset@gmail.com"]
+  gem.authors       = ["Johannes Gorset", "John Bellone"]
+  gem.email         = ["jgorset@gmail.com", "john.bellone.jr@gmail.com"]
   gem.description   = "Capistrano tasks for foreman and upstart."
   gem.summary       = "Capistrano tasks for foreman and upstart."
   gem.homepage      = "http://github.com/hyperoslo/capistrano-foreman"
