@@ -14,12 +14,13 @@ Add this to your `Capfile`:
 require 'capistrano/foreman'
 
 # Default settings
-set :foreman_sudo, true
-set :foreman_export_path, '/etc/init/sites' # Set to `/etc/init/` if you don't have a sites folder
+set :foreman_use_sudo, false
+set :foreman_roles, :all
+set :foreman_template, 'upstart'
+set :foreman_export_path, File.join(Dir.home, '.init')
 set :foreman_options, {
   app: application,
-  log: "#{shared_path}/log",
-  user: user,
+  log: File.join(shared_path, 'log')
 }
 ```
 

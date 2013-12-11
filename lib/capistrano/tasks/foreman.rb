@@ -1,19 +1,19 @@
 namespace :foreman do
+  task :setup do
+    invoke :'foreman:export'
+    invoke :'foreman:start'
+  end
 
   desc 'Export the Procfile'
   task :export do
-    on roles foreman_roles.map(&:to_sym) do
+    on roles fetch(:foreman_roles) do
       within release_path do
-        use_sudo = foreman_use_sudo ? 'sudo' : ''
-        command = foreman_use_binstubs ? 'bin/foreman' : 'bundle exec foreman'
-
         opts = {
-          app: application,
+          app: fetch(:application),
           log: File.join(shared_path, 'log'),
-          user: user
-        }.merge(foreman_options)
+        }.merge fetch(:foreman_options, {})
 
-        execute "#{use_sudo} #{command}",
+        execute :foreman, 'export',
           fetch(:foreman_template),
           fetch(:foreman_export_path),
           opts.map { |opt, value| "--#{opt}='#{value}'" }.join(' ')
@@ -23,39 +23,32 @@ namespace :foreman do
 
   desc 'Start the application services'
   task :start do
-    on roles foreman_roles.map(&:to_sym) do
-      use_sudo = foreman_use_sudo ? 'sudo' : ''
-      app = foreman_options[:app] || application
-      execute "#{use_sudo} service #{app} start"
+    on roles fetch(:foreman_roles) do
+      sudo :start, fetch(:foreman_app)
     end
   end
 
   desc 'Stop the application services'
   task :stop do
-    on roles foreman_roles do
-      use_sudo = foreman_use_sudo ? 'sudo' : ''
-      app = foreman_options[:app] || application
-      execute "#{use_sudo} service #{app} stop"
+    on roles fetch(:foreman_roles) do
+      sudo :stop, fetch(:foreman_app)
     end
   end
 
   desc 'Restart the application services'
   task :restart do
-    on roles foreman_roles.map(&:to_sym) do
-      use_sudo = foreman_use_sudo ? 'sudo' : ''
-      app = foreman_options[:app] || application
-      execute "#{use_sudo} service #{app} restart"
+    on roles fetch(:foreman_roles) do
+      sudo :restart, fetch(:foreman_app)
     end
   end
-
 end
 
 namespace :load do
   task :defaults do
-    set :foreman_use_sudo, true
-    set :foreman_use_binstubs, false
+    set :bundle_bins, fetch(:bundle_bins, []).push(%w(foreman))
     set :foreman_template, 'upstart'
-    set :foreman_roles, %w{app}
     set :foreman_export_path, '/etc/init/sites'
+    set :foreman_roles, :all
+    set :foreman_app, -> { fetch(:application) }
   end
 end
