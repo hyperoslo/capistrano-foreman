@@ -1,17 +1,24 @@
-# -*- encoding: utf-8 -*-
-require File.expand_path('../lib/capistrano/version', __FILE__)
+# coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
-Gem::Specification.new do |gem|
-  gem.authors       = ["Johannes Gorset"]
-  gem.email         = ["jgorset@gmail.com"]
-  gem.description   = "Capistrano tasks for foreman and upstart."
-  gem.summary       = "Capistrano tasks for foreman and upstart."
-  gem.homepage      = "http://github.com/hyperoslo/capistrano-foreman"
+Gem::Specification.new do |spec|
+  spec.name          = 'capistrano-foreman'
+  spec.version       = '0.0.1'
+  spec.authors       = ['Koen Punt']
+  spec.email         = ['me@koen.pt']
+  spec.description   = %q{Foreman and upstart tasks for Capistrano 3.x}
+  spec.summary       = %q{Foreman and upstart tasks for Capistrano 3.x}
+  spec.homepage      = 'https://github.com/koenpunt/capistrano-foreman'
+  spec.license       = 'MIT'
 
-  gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  gem.files         = `git ls-files`.split("\n")
-  gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  gem.name          = "capistrano-foreman"
-  gem.require_paths = ["lib"]
-  gem.version       = Capistrano::Foreman::VERSION
+  spec.files         = `git ls-files`.split($/)
+  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  spec.require_paths = ['lib']
+
+  spec.add_dependency 'capistrano', '~> 3.0.0'
+
+  spec.add_development_dependency 'bundler', '~> 1.3'
+  spec.add_development_dependency 'rake'
 end
