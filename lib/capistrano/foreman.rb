@@ -9,7 +9,7 @@ Capistrano::Configuration.instance(:must_exist).load do |configuration|
     desc "Export the Procfile to Ubuntu's upstart scripts"
     task :export, roles: :app do
       cmd = foreman_use_binstubs ? 'bin/foreman' : 'bundle exec foreman'
-      run "if [[ -d #{foreman_upstart_path} ]]; then #{foreman_sudo} mkdir -p #{foreman_upstart_path}; fi"
+      run "if [[ ! -d #{foreman_upstart_path} ]]; then #{foreman_sudo} mkdir -p #{foreman_upstart_path}; fi"
       run "cd #{release_path} && #{foreman_sudo} #{cmd} export upstart #{foreman_upstart_path} #{format(options)}"
     end
 
