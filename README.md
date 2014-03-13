@@ -25,7 +25,7 @@ Require in `Capfile`:
 require 'capistrano/foreman'
 ```
 
-Export Procfile to upstart and restart the application services:
+Export Procfile to process management format (defaults to upstart) and restart the application services:
 
     $ cap foreman:setup
     $ cap foreman:start
@@ -34,7 +34,8 @@ Configurable options, shown here with defaults:
 
 ```ruby
 set :foreman_roles, :all
-set :foreman_upstart_path, '/etc/init'
+set :foreman_export_format, 'upstart'
+set :foreman_export_path, '/etc/init'
 set :foreman_flags, "--root=#{current_path}" # optional, default is empty string
 set :foreman_target_path, release_path
 set :foreman_app, -> { fetch(:application) }
@@ -51,7 +52,7 @@ See [exporting options](http://ddollar.github.io/foreman/#EXPORTING) for an exha
 This gem provides the following Capistrano tasks:
 
 * `foreman:setup` exports the Procfile and starts application services
-* `foreman:export` exports the Procfile to Ubuntu's upstart scripts
+* `foreman:export` exports the Procfile to process management format
 * `foreman:restart` restarts the application services
 * `foreman:start` starts the application services
 * `foreman:stop` stops the application services

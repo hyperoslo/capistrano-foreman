@@ -5,7 +5,8 @@ namespace :foreman do
         Configurable options are:
 
           set :foreman_roles, :all
-          set :foreman_upstart_path, '/etc/init'
+          set :foreman_export_format, 'upstart'
+          set :foreman_export_path, '/etc/init'
           set :foreman_flags, ''
           set :foreman_target_path, release_path
           set :foreman_app, -> { fetch(:application) }
@@ -20,10 +21,10 @@ namespace :foreman do
     invoke :'foreman:start'
   end
 
-  desc "Export the Procfile to Ubuntu's upstart scripts"
+  desc "Export the Procfile to another process management format"
   task :export do
     on roles fetch(:foreman_roles) do
-      execute :mkdir, "-p", fetch(:foreman_upstart_path) unless test "[ -d #{fetch(:foreman_upstart_path)} ]"
+      execute :mkdir, "-p", fetch(:foreman_export_path) unless test "[ -d #{fetch(:foreman_export_path)} ]"
       within fetch(:foreman_target_path, release_path) do
 
         options = {
@@ -34,7 +35,7 @@ namespace :foreman do
         options[:port] = fetch(:foreman_port) if fetch(:foreman_port)
         options[:user] = fetch(:foreman_user) if fetch(:foreman_user)
 
-        execute :foreman, 'export', 'upstart', fetch(:foreman_upstart_path),
+        execute :foreman, 'export', fetch(:foreman_export_format), fetch(:foreman_export_path),
           options.map{ |k, v| "--#{k}='#{v}'" }, fetch(:foreman_flags)
       end
     end
@@ -66,7 +67,8 @@ end
 namespace :load do
   task :defaults do
     set :foreman_roles, :all
-    set :foreman_upstart_path, '/etc/init'
+    set :foreman_export_format, 'upstart'
+    set :foreman_export_path, '/etc/init'
     set :foreman_flags, ''
     set :foreman_app, -> { fetch(:application) }
     set :foreman_log, -> { shared_path.join('log') }
