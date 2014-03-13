@@ -1,41 +1,65 @@
-# Capistrano Foreman
+# Capistrano::foreman
 
-[![Code Climate](https://codeclimate.com/github/hyperoslo/capistrano-foreman.png)](https://codeclimate.com/github/hyperoslo/capistrano-foreman)
-
-Capistrano tasks for foreman and upstart.
+Foreman support for Capistrano 3
 
 ## Installation
 
-    $ gem install capistrano-foreman
-
-Add this to your `Capfile`:
-
 ```ruby
-require 'capistrano/foreman'
-
-# Default settings
-set :foreman_sudo, 'sudo'                    # Set to `rvmsudo` if you're using RVM
-set :foreman_upstart_path, '/etc/init/sites' # Set to `/etc/init/` if you don't have a sites folder
-set :foreman_options, {
-  app: application,
-  log: "#{shared_path}/log",
-  user: user,
-}
+gem 'capistrano', '~> 3.1'
+gem 'capistrano-foreman', github: 'koenpunt/capistrano-foreman'
 ```
 
-See [exporting options](http://ddollar.github.io/foreman/#EXPORTING0) for an exhaustive list of foreman options.
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install capistrano-foreman
 
 ## Usage
 
-Export Procfile to upstart:
+Require in `Capfile`:
 
-    $ cap foreman:export
+```ruby
+require 'capistrano/foreman'
+```
 
-Restart the application services:
+Export Procfile to upstart and restart the application services:
 
-    $ cap foreman:restart
+    $ cap foreman:setup
+    $ cap foreman:start
 
-## Credits
+Configurable options, shown here with defaults:
 
-Hyper made this. We're a digital communications agency with a passion for good code,
-and if you're using this library we probably want to hire you.
+```ruby
+set :foreman_roles, :all
+set :foreman_upstart_path, '/etc/init'
+set :foreman_flags, "--root=#{current_path}" # optional, default is empty string
+set :foreman_target_path, release_path
+set :foreman_app, -> { fetch(:application) }
+set :foreman_concurrency, 'web=2,worker=1' # optional, default is not set
+set :foreman_log, -> { shared_path.join('log') }
+set :foreman_port, 3000 # optional, default is not set
+set :foreman_user, 'www-data' # optional, default is not set
+```
+
+See [exporting options](http://ddollar.github.io/foreman/#EXPORTING) for an exhaustive list of foreman options.
+
+### Tasks
+
+This gem provides the following Capistrano tasks:
+
+* `foreman:setup` exports the Procfile and starts application services
+* `foreman:export` exports the Procfile to Ubuntu's upstart scripts
+* `foreman:restart` restarts the application services
+* `foreman:start` starts the application services
+* `foreman:stop` stops the application services
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Added some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request

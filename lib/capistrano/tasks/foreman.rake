@@ -17,6 +17,7 @@ namespace :foreman do
 
   task :setup do
     invoke :'foreman:export'
+    invoke :'foreman:start'
   end
 
   desc "Export the Procfile to Ubuntu's upstart scripts"
