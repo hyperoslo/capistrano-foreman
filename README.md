@@ -57,6 +57,52 @@ This gem provides the following Capistrano tasks:
 * `foreman:start` starts the application services
 * `foreman:stop` stops the application services
 
+## Example
+
+A typical setup would look like the following:
+
+Have a group-writeable directory under `/etc/init` for the group `deploy` (in this case I call it `sites`) to store the init scripts:
+
+```bash
+sudo mkdir /etc/init/sites
+sudo chown :deploy /etc/init/sites
+sudo chmod g+w /etc/init/sites
+```
+
+And the following configuration in `deploy.rb`:
+
+```ruby
+# Set the app with `sites/` prefix
+set :foreman_app, -> { "sites/#{fetch(:application)}" }
+
+# Set user to `deploy`, assuming this is your deploy user
+set :foreman_user, 'deploy'
+
+# Set root to `current_path` so exporting only have to be done once.
+set :foreman_flags, "--root=#{current_path}"
+```
+
+Setup your init scripts by running `foreman:setup` after your first deploy.
+From this moment on you only have to run `foreman:setup` when your `Procfile` has changed or when you alter the foreman deploy configuration.
+
+Finally you have to instruct Capistrano to run `foreman:restart` after deploy:
+
+```ruby
+# Hook foreman restart after publishing
+after :'deploy:publishing', :'foreman:restart'
+```
+
+## Notes
+
+When using `rbenv`, `rvm`, `chruby` and/or `bundler` don't forget to add `foreman` to the bins list:
+
+```ruby
+fetch(:rbenv_map_bins, []).push 'foreman'
+fetch(:rvm_map_bins, []).push 'foreman'
+fetch(:chruby_map_bins, []).push 'foreman'
+fetch(:bundle_bins, []).push 'foreman'
+```
+
 ## Contributing
 
 1. Fork it
