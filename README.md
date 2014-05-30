@@ -11,7 +11,7 @@ Capistrano tasks for foreman and upstart.
 Add this to your `Capfile`:
 
 ```ruby
-require 'capistrano/foreman'
+require 'capistrano-foreman'
 
 # Default settings
 set :foreman_sudo, 'sudo'                    # Set to `rvmsudo` if you're using RVM
