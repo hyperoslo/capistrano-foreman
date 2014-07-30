@@ -1,41 +1,112 @@
-# Capistrano Foreman
+# Capistrano::foreman
 
-[![Code Climate](https://codeclimate.com/github/hyperoslo/capistrano-foreman.png)](https://codeclimate.com/github/hyperoslo/capistrano-foreman)
-
-Capistrano tasks for foreman and upstart.
+Foreman support for Capistrano 3
 
 ## Installation
 
-    $ gem install capistrano-foreman
-
-Add this to your `Capfile`:
-
 ```ruby
-require 'capistrano/foreman'
-
-# Default settings
-set :foreman_sudo, 'sudo'                    # Set to `rvmsudo` if you're using RVM
-set :foreman_upstart_path, '/etc/init/sites' # Set to `/etc/init/` if you don't have a sites folder
-set :foreman_options, {
-  app: application,
-  log: "#{shared_path}/log",
-  user: user,
-}
+gem 'capistrano', '~> 3.1'
+gem 'capistrano-foreman', github: 'koenpunt/capistrano-foreman'
 ```
 
-See [exporting options](http://ddollar.github.io/foreman/#EXPORTING0) for an exhaustive list of foreman options.
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install capistrano-foreman
 
 ## Usage
 
-Export Procfile to upstart:
+Require in `Capfile`:
 
-    $ cap foreman:export
+```ruby
+require 'capistrano/foreman'
+```
 
-Restart the application services:
+Export Procfile to process management format (defaults to upstart) and restart the application services:
 
-    $ cap foreman:restart
+    $ cap foreman:setup
+    $ cap foreman:start
 
-## Credits
+Configurable options, shown here with defaults:
 
-Hyper made this. We're a digital communications agency with a passion for good code,
-and if you're using this library we probably want to hire you.
+```ruby
+set :foreman_roles, :all
+set :foreman_export_format, 'upstart'
+set :foreman_export_path, '/etc/init'
+set :foreman_flags, "--root=#{current_path}" # optional, default is empty string
+set :foreman_target_path, release_path
+set :foreman_app, -> { fetch(:application) }
+set :foreman_concurrency, 'web=2,worker=1' # optional, default is not set
+set :foreman_log, -> { shared_path.join('log') }
+set :foreman_port, 3000 # optional, default is not set
+set :foreman_user, 'www-data' # optional, default is not set
+```
+
+See [exporting options](http://ddollar.github.io/foreman/#EXPORTING) for an exhaustive list of foreman options.
+
+### Tasks
+
+This gem provides the following Capistrano tasks:
+
+* `foreman:setup` exports the Procfile and starts application services
+* `foreman:export` exports the Procfile to process management format
+* `foreman:restart` restarts the application services
+* `foreman:start` starts the application services
+* `foreman:stop` stops the application services
+
+## Example
+
+A typical setup would look like the following:
+
+Have a group-writeable directory under `/etc/init` for the group `deploy` (in this case I call it `sites`) to store the init scripts:
+
+```bash
+sudo mkdir /etc/init/sites
+sudo chown :deploy /etc/init/sites
+sudo chmod g+w /etc/init/sites
+```
+
+And the following configuration in `deploy.rb`:
+
+```ruby
+# Set the app with `sites/` prefix
+set :foreman_app, -> { "sites/#{fetch(:application)}" }
+
+# Set user to `deploy`, assuming this is your deploy user
+set :foreman_user, 'deploy'
+
+# Set root to `current_path` so exporting only have to be done once.
+set :foreman_flags, "--root=#{current_path}"
+```
+
+Setup your init scripts by running `foreman:setup` after your first deploy.
+From this moment on you only have to run `foreman:setup` when your `Procfile` has changed or when you alter the foreman deploy configuration.
+
+Finally you have to instruct Capistrano to run `foreman:restart` after deploy:
+
+```ruby
+# Hook foreman restart after publishing
+after :'deploy:publishing', :'foreman:restart'
+```
+
+## Notes
+
+When using `rbenv`, `rvm`, `chruby` and/or `bundler` don't forget to add `foreman` to the bins list:
+
+```ruby
+fetch(:rbenv_map_bins, []).push 'foreman'
+fetch(:rvm_map_bins, []).push 'foreman'
+fetch(:chruby_map_bins, []).push 'foreman'
+fetch(:bundle_bins, []).push 'foreman'
+```
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Added some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
