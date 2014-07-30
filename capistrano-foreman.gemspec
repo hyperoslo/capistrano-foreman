@@ -5,11 +5,11 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 Gem::Specification.new do |spec|
   spec.name          = 'capistrano-foreman'
   spec.version       = '0.0.1'
-  spec.authors       = ['Koen Punt']
-  spec.email         = ['me@koen.pt']
+  spec.authors       = ['Johannes Gorset', 'Koen Punt']
+  spec.email         = ['jgorset@gmail.com', 'me@koen.pt']
   spec.description   = %q{Foreman and upstart tasks for Capistrano 3.x}
   spec.summary       = %q{Foreman and upstart tasks for Capistrano 3.x}
-  spec.homepage      = 'https://github.com/koenpunt/capistrano-foreman'
+  spec.homepage      = 'https://github.com/hyperoslo/capistrano-foreman'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)
