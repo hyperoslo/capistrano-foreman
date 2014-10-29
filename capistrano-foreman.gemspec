@@ -1,4 +1,6 @@
-require File.expand_path('../lib/capistrano-foreman', __FILE__)
+# -*- encoding: utf-8 -*-
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Johannes Gorset", 'John Bellone']
@@ -12,7 +14,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.name          = "capistrano-foreman"
   gem.require_paths = ["lib"]
-  gem.version       = Capistrano::Foreman::VERSION
+  gem.version       = '3.0.0'
 
   gem.add_dependency 'capistrano', '~> 3.1'
   gem.add_dependency 'capistrano-bundler', '~> 1.1'
