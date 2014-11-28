@@ -50,5 +50,9 @@ namespace :load do
     set :foreman_export_path, '/etc/init/sites'
     set :foreman_roles, :all
     set :foreman_app, -> { fetch(:application) }
+
+    if !fetch(:rvm_map_bins).nil?
+      set :rvm_map_bins, fetch(:rvm_map_bins).push('foreman')
+    end
   end
 end
