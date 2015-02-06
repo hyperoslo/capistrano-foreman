@@ -14,7 +14,7 @@ Add this to your `Capfile`:
 require 'capistrano/foreman'
 
 # Default settings
-set :foreman_use_sudo, false
+set :foreman_use_sudo, false # Set to :rbenv for rbenv sudo, :rvm for rvmsudo or true for normal sudo
 set :foreman_roles, :all
 set :foreman_template, 'upstart'
 set :foreman_export_path, File.join(Dir.home, '.init')
