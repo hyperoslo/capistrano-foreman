@@ -44,10 +44,10 @@ namespace :foreman do
 
   def foreman_exec(*args)
     if sudo_type = fetch(:foreman_use_sudo)
-      if sudo_type.to_s == "rbenv"
+      if sudo_type.to_s == 'rbenv'
         execute(:rbenv, :sudo, *args)
-      elsif sudo_type.to_s == "rvm"
-        execute(:rvmsudo *args)
+      elsif sudo_type.to_s == 'rvm'
+        execute(:rvmsudo, *args)
       else
         sudo(*args)
       end
