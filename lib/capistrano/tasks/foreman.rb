@@ -43,7 +43,7 @@ namespace :foreman do
   end
 
   def foreman_exec(*args)
-    sudo_type = fetch(:foreman_use_sudo).to_s
+    sudo_type = fetch(:foreman_use_sudo)
     case sudo_type.to_s
     when 'rbenv'
       execute(:rbenv, :sudo, *args)
