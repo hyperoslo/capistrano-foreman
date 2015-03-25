@@ -18,7 +18,7 @@ namespace :foreman do
         foreman_exec :foreman, 'export',
           fetch(:foreman_template),
           fetch(:foreman_export_path),
-          opts.map { |opt, value| "--#{opt}='#{value}'" }.join(' ')
+          opts.map { |opt, value| "--#{opt}=\"#{value}\"" }.join(' ')
       end
     end
   end
