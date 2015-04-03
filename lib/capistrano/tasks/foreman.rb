@@ -45,23 +45,21 @@ namespace :foreman do
   end
 
   def foreman_exec(*args)
-    if sudo_type = fetch(:foreman_use_sudo)
-      if sudo_type.to_s == "rbenv"
-        execute(:rbenv, :sudo, *args)
-      elsif sudo_type.to_s == "rvm"
-        execute(:rvmsudo *args)
-      else
-        sudo(*args)
-      end
+    sudo_type = fetch(:foreman_use_sudo)
+    case sudo_type.to_s
+    when 'rbenv'
+      execute(:rbenv, :sudo, *args)
+    when 'rvm'
+      execute(:rvmsudo, *args)
     else
-      execute(*args)
+      sudo_type ? sudo(*args) : execute(*args)
     end
   end
 end
 
 namespace :load do
   task :defaults do
-    set :bundle_bins, fetch(:bundle_bins, []).push('foreman')
+    set :bundle_bins, fetch(:bundle_bins, []).push(:foreman)
     set :foreman_use_sudo, false
     set :foreman_template, 'upstart'
     set :foreman_export_path, '/etc/init/sites'
