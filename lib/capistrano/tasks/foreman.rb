@@ -48,6 +48,9 @@ namespace :foreman do
     sudo_type = fetch(:foreman_use_sudo)
     case sudo_type.to_s
     when 'rbenv'
+      # this is required because 'rbenv sudo'
+      # is not recognized by bundle_bins
+      args.unshift(:bundle, :exec) if args[0].to_s == "foreman"
       execute(:rbenv, :sudo, *args)
     when 'rvm'
       execute(:rvmsudo, *args)
