@@ -53,7 +53,7 @@ namespace :foreman do
       args.unshift(:bundle, :exec) if args[0].to_s == "foreman"
       execute(:rbenv, :sudo, *args)
     when 'rvm'
-      execute(:rvmsudo, *args)
+      execute(:bundle, :exec, :rvmsudo, *args)
     else
       sudo_type ? sudo(*args) : execute(*args)
     end
