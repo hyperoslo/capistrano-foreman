@@ -1,5 +1,7 @@
 # Capistrano Foreman
 
+[![Join the chat at https://gitter.im/hyperoslo/capistrano-foreman](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hyperoslo/capistrano-foreman?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Code Climate](https://img.shields.io/codeclimate/github/hyperoslo/capistrano-foreman.svg?style=flat)](https://codeclimate.com/github/hyperoslo/capistrano-foreman)
 
 Capistrano tasks for foreman and upstart.
