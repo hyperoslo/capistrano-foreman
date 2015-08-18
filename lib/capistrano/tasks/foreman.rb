@@ -56,6 +56,8 @@ namespace :foreman do
       execute(:rbenv, :sudo, *args)
     when 'rvm'
       execute(:rvmsudo, *args)
+    when 'chruby'
+      execute(:sudo, 'chruby-exec', fetch(:chruby_ruby), '--', *args)
     else
       sudo_type ? sudo(*args) : execute(*args)
     end
