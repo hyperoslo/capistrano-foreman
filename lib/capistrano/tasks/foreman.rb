@@ -11,6 +11,8 @@ namespace :foreman do
         app: fetch(:application),
         log: File.join(shared_path, 'log'),
       }.merge fetch(:foreman_options, {})
+      
+      opts.merge!(host.properties.fetch(:foreman_options) || {})
 
       execute(:mkdir, "-p", opts[:log])
 
