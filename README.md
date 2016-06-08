@@ -24,7 +24,7 @@ set :foreman_options, ->{ {
 } }
 ```
 
-See [exporting options](http://ddollar.github.io/foreman/#EXPORTING0) for an exhaustive list of foreman options.
+See [exporting options](http://ddollar.github.io/foreman/#EXPORTING) for an exhaustive list of foreman options.
 
 ## Usage
 
