@@ -11,14 +11,14 @@ namespace :foreman do
         app: fetch(:application),
         log: File.join(shared_path, 'log'),
       }.merge fetch(:foreman_options, {})
-      
+
       opts.merge!(host.properties.fetch(:foreman_options) || {})
 
       execute(:mkdir, "-p", opts[:log])
 
       within release_path do
         foreman_exec :foreman, 'export',
-          fetch(:foreman_template),
+          fetch(:foreman_init_system),
           fetch(:foreman_export_path),
           opts.map { |opt, value| "--#{opt}=\"#{value}\"" }.join(' ')
       end
@@ -28,21 +28,38 @@ namespace :foreman do
   desc 'Start the application services'
   task :start do
     on roles fetch(:foreman_roles) do
-      foreman_exec :start, fetch(:foreman_app)
+      case fetch(:foreman_init_system)
+      when 'systemd'
+        foreman_exec :systemctl, :enable, fetch(:foreman_app_name_systemd)
+        foreman_exec :systemctl, :start, fetch(:foreman_app_name_systemd)
+      else
+        foreman_exec :start, fetch(:foreman_app)
+      end
     end
   end
 
   desc 'Stop the application services'
   task :stop do
     on roles fetch(:foreman_roles) do
-      foreman_exec :stop, fetch(:foreman_app)
+      case fetch(:foreman_init_system)
+      when 'systemd'
+        foreman_exec :systemctl, :stop, fetch(:foreman_app_name_systemd)
+        foreman_exec :systemctl, :disable, fetch(:foreman_app_name_systemd)
+      else
+        foreman_exec :stop, fetch(:foreman_app)
+      end
     end
   end
 
   desc 'Restart the application services'
   task :restart do
     on roles fetch(:foreman_roles) do
-      foreman_exec :restart, fetch(:foreman_app)
+      case fetch(:foreman_init_system)
+      when 'systemd'
+        foreman_exec :systemctl, :restart, fetch(:foreman_app_name_systemd)
+      else
+        foreman_exec :restart, fetch(:foreman_app)
+      end
     end
   end
 
@@ -68,10 +85,11 @@ namespace :load do
   task :defaults do
     set :bundle_bins, fetch(:bundle_bins, []).push(:foreman)
     set :foreman_use_sudo, false
-    set :foreman_template, 'upstart'
+    set :foreman_init_system, 'upstart'
     set :foreman_export_path, '/etc/init/sites'
     set :foreman_roles, :all
     set :foreman_app, -> { fetch(:application) }
+    set :foreman_app_name_systemd, -> { "#{ fetch(:foreman_app) }.target" }
 
     if !fetch(:rvm_map_bins).nil?
       set :rvm_map_bins, fetch(:rvm_map_bins).push('foreman')

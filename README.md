@@ -2,7 +2,7 @@
 
 [![Code Climate](https://img.shields.io/codeclimate/github/hyperoslo/capistrano-foreman.svg?style=flat)](https://codeclimate.com/github/hyperoslo/capistrano-foreman)
 
-Capistrano tasks for foreman and upstart.
+Capistrano tasks for foreman and upstart/systemd.
 
 ## Installation
 
@@ -16,7 +16,7 @@ require 'capistrano/foreman'
 # Default settings
 set :foreman_use_sudo, false # Set to :rbenv for rbenv sudo, :rvm for rvmsudo or true for normal sudo
 set :foreman_roles, :all
-set :foreman_template, 'upstart'
+set :foreman_init_system, 'upstart'
 set :foreman_export_path, ->{ File.join(Dir.home, '.init') }
 set :foreman_options, ->{ {
   app: application,
@@ -28,7 +28,7 @@ See [exporting options](http://ddollar.github.io/foreman/#EXPORTING) for an exha
 
 ## Usage
 
-Export Procfile to upstart:
+Export Procfile to upstart/systemd:
 
     $ bundle exec cap production foreman:export
 
