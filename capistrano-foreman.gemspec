@@ -5,8 +5,8 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 Gem::Specification.new do |gem|
   gem.authors       = ["Johannes Gorset", 'John Bellone']
   gem.email         = ["jgorset@gmail.com", 'jbellone@bloomberg.net']
-  gem.description   = "Capistrano tasks for foreman and upstart."
-  gem.summary       = "Capistrano tasks for foreman and upstart."
+  gem.description   = "Capistrano tasks for foreman and upstart/systemd."
+  gem.summary       = "Capistrano tasks for foreman and upstart/systemd."
   gem.homepage      = "http://github.com/hyperoslo/capistrano-foreman"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
