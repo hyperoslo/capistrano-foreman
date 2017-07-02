@@ -18,6 +18,8 @@ set :foreman_use_sudo, false # Set to :rbenv for rbenv sudo, :rvm for rvmsudo or
 set :foreman_roles, :all
 set :foreman_init_system, 'upstart'
 set :foreman_export_path, ->{ File.join(Dir.home, '.init') }
+set :foreman_app, -> { fetch(:application) }
+set :foreman_app_name_systemd, -> { "#{ fetch(:foreman_app) }.target" }
 set :foreman_options, ->{ {
   app: application,
   log: File.join(shared_path, 'log')
