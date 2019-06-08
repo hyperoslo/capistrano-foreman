@@ -22,6 +22,10 @@ namespace :foreman do
           fetch(:foreman_export_path),
           opts.map { |opt, value| "--#{opt}=\"#{value}\"" }.join(' ')
       end
+
+      if fetch(:foreman_init_system) == 'systemd'
+        foreman_exec :systemctl, :'daemon-reload'
+      end
     end
   end
 
