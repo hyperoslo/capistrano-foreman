@@ -23,7 +23,7 @@ namespace :foreman do
           opts.map { |opt, value| "--#{opt}=\"#{value}\"" }.join(' ')
       end
 
-      if fetch(:foreman_init_system) == 'systemd'
+      if fetch(:foreman_init_system).to_sym == :systemd
         foreman_exec :systemctl, :'daemon-reload'
       end
     end
@@ -32,8 +32,8 @@ namespace :foreman do
   desc 'Start the application services'
   task :start do
     on roles fetch(:foreman_roles) do
-      case fetch(:foreman_init_system)
-      when 'systemd'
+      case fetch(:foreman_init_system).to_sym
+      when :systemd
         foreman_exec :systemctl, :enable, fetch(:foreman_app_name_systemd)
         foreman_exec :systemctl, :start, fetch(:foreman_app_name_systemd)
       else
@@ -45,8 +45,8 @@ namespace :foreman do
   desc 'Stop the application services'
   task :stop do
     on roles fetch(:foreman_roles) do
-      case fetch(:foreman_init_system)
-      when 'systemd'
+      case fetch(:foreman_init_system).to_sym
+      when :systemd
         foreman_exec :systemctl, :stop, fetch(:foreman_app_name_systemd)
         foreman_exec :systemctl, :disable, fetch(:foreman_app_name_systemd)
       else
@@ -58,8 +58,8 @@ namespace :foreman do
   desc 'Restart the application services'
   task :restart do
     on roles fetch(:foreman_roles) do
-      case fetch(:foreman_init_system)
-      when 'systemd'
+      case fetch(:foreman_init_system).to_sym
+      when :systemd
         foreman_exec :systemctl, :restart, fetch(:foreman_app_name_systemd)
       else
         foreman_exec :restart, fetch(:foreman_app)
@@ -69,15 +69,15 @@ namespace :foreman do
 
   def foreman_exec(*args)
     sudo_type = fetch(:foreman_use_sudo)
-    case sudo_type.to_s
-    when 'rbenv'
+    case sudo_type.to_sym
+    when :rbenv
       # this is required because 'rbenv sudo'
       # is not recognized by bundle_bins
       args.unshift(:bundle, :exec) if args[0].to_s == "foreman"
       execute(:rbenv, :sudo, *args)
-    when 'rvm'
+    when :rvm
       execute(:rvmsudo, *args)
-    when 'chruby'
+    when :chruby
       execute(:sudo, 'chruby-exec', fetch(:chruby_ruby), '--', *args)
     else
       sudo_type ? sudo(*args) : execute(*args)
@@ -89,7 +89,7 @@ namespace :load do
   task :defaults do
     set :bundle_bins, fetch(:bundle_bins, []).push(:foreman)
     set :foreman_use_sudo, false
-    set :foreman_init_system, 'upstart'
+    set :foreman_init_system, :upstart
     set :foreman_export_path, '/etc/init/sites'
     set :foreman_roles, :all
     set :foreman_app, -> { fetch(:application) }

@@ -16,7 +16,7 @@ require 'capistrano/foreman'
 # Default settings
 set :foreman_use_sudo, false # Set to :rbenv for rbenv sudo, :rvm for rvmsudo or true for normal sudo
 set :foreman_roles, :all
-set :foreman_init_system, 'upstart'
+set :foreman_init_system, :upstart
 set :foreman_export_path, ->{ File.join(Dir.home, '.init') }
 set :foreman_app, -> { fetch(:application) }
 set :foreman_app_name_systemd, -> { "#{ fetch(:foreman_app) }.target" }
