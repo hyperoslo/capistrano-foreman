@@ -71,10 +71,8 @@ namespace :foreman do
     sudo_type = fetch(:foreman_use_sudo)
     case sudo_type.to_s
     when 'rbenv'
-      # this is required because 'rbenv sudo'
-      # is not recognized by bundle_bins
-      args.unshift(:bundle, :exec) if args[0].to_s == 'foreman' && bundler_installed?
-      execute(:rbenv, :sudo, *args)
+      rbenv_sudo_alias = fetch(:foreman_rbenv_sudo).to_sym
+      execute(rbenv_sudo_alias, *args)
     when 'rvm'
       execute(:rvmsudo, *args)
     when 'chruby'
@@ -93,6 +91,7 @@ namespace :load do
     set :foreman_roles, :all
     set :foreman_app, -> { fetch(:application) }
     set :foreman_app_name_systemd, -> { "#{ fetch(:foreman_app) }.target" }
+    set :foreman_rbenv_sudo, :rbenvsudo
 
     append :bundle_bins, 'foreman' if bundler_installed?
     append :rvm_map_bins, 'foreman' if rvm_installed?

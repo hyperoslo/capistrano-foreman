@@ -31,6 +31,33 @@ See [exporting options](http://ddollar.github.io/foreman/#EXPORTING) for an exha
 ### Use it with capistrano-bundler
 You don't have to configure anything, it's already compatible with capistrano-bundler!
 
+### Use it with rvm
+
+Add this to your `config/deploy.rb`:
+```ruby
+append :rvm_map_bins, 'rvmsudo'
+```
+
+### Use it with rbenv
+
+Since rbenv does not have a command like `rvmsudo` to perform sudo operation with it, you can use a sort of an hack like this below ([source](https://github.com/rbenv/rbenv/issues/60#issuecomment-2439713))
+```bash
+$ vim .bash.d/50_rbenv.bash
+# Append this
+# function rbenvsudo(){
+#   executable=$1
+#   shift 1
+#   sudo $(rbenv which $executable) $*
+# }
+$ source .bash.d/50_rbenv.bash
+```
+
+Add this to your `config/deploy.rb` with the alias/function name wrote before to perform sudo command with rbenv:
+```ruby
+set :foreman_rbenv_sudo, 'rbenvsudo'
+append :rbenv_map_bins, 'rbenvsudo'
+```
+
 ## Usage
 
 Export Procfile to upstart/systemd:
