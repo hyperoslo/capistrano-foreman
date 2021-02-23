@@ -28,6 +28,9 @@ set :foreman_options, ->{ {
 
 See [exporting options](http://ddollar.github.io/foreman/#EXPORTING) for an exhaustive list of foreman options.
 
+### Use it with capistrano-bundler
+You don't have to configure anything, it's already compatible with capistrano-bundler!
+
 ## Usage
 
 Export Procfile to upstart/systemd:

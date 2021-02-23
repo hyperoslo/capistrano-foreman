@@ -73,7 +73,7 @@ namespace :foreman do
     when 'rbenv'
       # this is required because 'rbenv sudo'
       # is not recognized by bundle_bins
-      args.unshift(:bundle, :exec) if args[0].to_s == "foreman"
+      args.unshift(:bundle, :exec) if args[0].to_s == 'foreman' && bundler_installed?
       execute(:rbenv, :sudo, *args)
     when 'rvm'
       execute(:rvmsudo, *args)
@@ -87,7 +87,6 @@ end
 
 namespace :load do
   task :defaults do
-    set :bundle_bins, fetch(:bundle_bins, []).push(:foreman)
     set :foreman_use_sudo, false
     set :foreman_init_system, 'upstart'
     set :foreman_export_path, '/etc/init/sites'
@@ -95,8 +94,20 @@ namespace :load do
     set :foreman_app, -> { fetch(:application) }
     set :foreman_app_name_systemd, -> { "#{ fetch(:foreman_app) }.target" }
 
-    if !fetch(:rvm_map_bins).nil?
-      set :rvm_map_bins, fetch(:rvm_map_bins).push('foreman')
-    end
+    append :bundle_bins, 'foreman' if bundler_installed?
+    append :rvm_map_bins, 'foreman' if rvm_installed?
+    append :rbenv_map_bins, 'foreman' if rbenv_installed?
+  end
+
+  def bundler_installed?
+    !fetch(:bundle_bins).nil?
+  end
+
+  def rvm_installed?
+    !fetch(:rvm_map_bins).nil?
+  end
+
+  def rbenv_installed?
+    !fetch(:rbenv_map_bins).nil?
   end
 end
