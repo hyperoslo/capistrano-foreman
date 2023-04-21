@@ -17,5 +17,5 @@ Gem::Specification.new do |gem|
   gem.version       = '1.4.0'
 
   gem.add_dependency 'capistrano', '~> 3.1'
-  gem.add_dependency 'capistrano-bundler', '~> 1.1'
+  gem.add_dependency 'capistrano-bundler', '~> 2.0'
 end
